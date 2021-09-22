@@ -22,6 +22,7 @@ class Message extends Model
     protected $fillable = [
         'name',
         'description',
+        'placeholders',
         'type',
         'project_id',
     ];

@@ -83,6 +83,10 @@ class ArbFormatter implements ArbFormatterContract
             $attributes['description'] = $message->description;
         }
 
+        if (!is_null($message->placeholders)) {
+            $attributes['placeholders'] = json_decode($message->placeholders, true);
+        }
+
         $return = [$message->name => $value];
         if (!empty($attributes)) {
             $return["@$message->name"] = $attributes;

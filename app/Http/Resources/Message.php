@@ -19,6 +19,7 @@ class Message extends JsonResource
             'id' => $message->id,
             'name' => $message->name,
             'description' => $message->description,
+            'placeholders' => $message->placeholders,
             'type' => $message->type,
             'project_id' => $message->project_id,
             'can_update' => $user->can('update', [$message, $request->route('project')]),

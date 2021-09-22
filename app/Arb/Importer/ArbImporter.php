@@ -109,6 +109,7 @@ class ArbImporter
                 'name' => $key,
                 'value' => $item,
                 'description' => $json["@$key"]['description'] ?? null,
+                'placeholders' => $json["@$key"]['placeholders'] ?? null,
             ];
         }
 
@@ -141,14 +142,32 @@ class ArbImporter
 
             foreach ($importedMessages as $importedMessage) {
                 if (!$projectMessages->contains('name', $importedMessage['name'])) {
+                    $placeholders = null;
+
+                    if ($importedMessage['placeholders'] !== null) {
+                        $placeholders = json_encode($importedMessage['placeholders']);
+                    }
+
                     $message = Message::create([
                         'name' => $importedMessage['name'],
                         'description' => $importedMessage['description'],
+                        'placeholders' => $placeholders,
                         'type' => Message::TYPE_MESSAGE,
                         'project_id' => $project->id,
                     ]);
                 } else {
                     $message = $projectMessages->firstWhere('name', $importedMessage['name']);
+
+                    $placeholders = null;
+
+                    if ($importedMessage['placeholders'] !== null) {
+                        $placeholders = json_encode($importedMessage['placeholders']);
+                    }
+
+                    if ($message->placeholders !== $placeholders) {
+                        $message->placeholders = $placeholders;
+                        $message->save();
+                    }
                 }
 
                 $form = null;
